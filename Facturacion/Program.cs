@@ -1,4 +1,6 @@
 using Facturacion.Data;
+using Facturacion.Models;
+using Facturacion.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
@@ -13,6 +15,9 @@ namespace Facturacion
 
       // Database context
       builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+      // Repositories
+      builder.Services.AddScoped<IRepository<Article>, ArticleRepository>();
 
       builder.Services.AddControllers();
       // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
