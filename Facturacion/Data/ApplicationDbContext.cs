@@ -7,5 +7,16 @@ namespace Facturacion.Data
   {
     public DbSet<Article> Article { get; set; }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+      modelBuilder.Entity<Article>(entity =>
+      {
+        entity.Property(a => a.IsAvailable)
+              .HasDefaultValue(true);
+
+        entity.Property(a => a.UnitPrice)
+              .HasPrecision(18, 2);
+      });
+    }
   }
 }
