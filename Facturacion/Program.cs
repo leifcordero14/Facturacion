@@ -1,3 +1,5 @@
+using Facturacion.Data;
+using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
 namespace Facturacion
@@ -8,6 +10,10 @@ namespace Facturacion
     {
       var builder = WebApplication.CreateBuilder(args);
       // Add services to the container.
+
+      // Database context
+      builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
       builder.Services.AddControllers();
       // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
       builder.Services.AddOpenApi();
