@@ -43,7 +43,7 @@ namespace Facturacion.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Article");
+                    b.ToTable("Article", (string)null);
                 });
 #pragma warning restore 612, 618
         }

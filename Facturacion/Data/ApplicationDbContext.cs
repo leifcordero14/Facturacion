@@ -9,9 +9,14 @@ namespace Facturacion.Data
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-      modelBuilder.Entity<Article>()
-          .Property(a => a.IsAvailable)
-          .HasDefaultValue(true);
+      modelBuilder.Entity<Article>(entity =>
+      {
+        entity.Property(a => a.IsAvailable)
+              .HasDefaultValue(true);
+
+        entity.Property(a => a.UnitPrice)
+              .HasPrecision(18, 2);
+      });
     }
   }
 }
