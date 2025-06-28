@@ -1,73 +1,46 @@
 ﻿using Facturacion.DTOs;
-using Facturacion.Models;
-using Facturacion.Repositories;
+using Facturacion.Services;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Facturacion.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
-  public class ArticlesController(IRepository<Article> repository) : ControllerBase
+  public class ArticlesController(
+    IService<ArticleDto, CreateArticleDto, UpdateArticleDto> articleService, 
+    IValidator<CreateArticleDto> createArticleValidator, 
+    IValidator<UpdateArticleDto> updateArticleValidator) : ControllerBase
   {
-    private readonly IRepository<Article> _repository = repository;
+    private readonly IService<ArticleDto, CreateArticleDto, UpdateArticleDto> _articleService = articleService;
+    private readonly IValidator<CreateArticleDto> _createArticleValidator = createArticleValidator;
+    private readonly IValidator<UpdateArticleDto> _updateArticleValidator = updateArticleValidator;
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ArticleDto>>> GetAll()
     {
-      var articles = await _repository.GetAll();
-
-      var articleDtos = articles.Select(a => new ArticleDto
-      {
-        Id = a.Id,
-        Description = a.Description,
-        UnitPrice = a.UnitPrice,
-        IsAvailable = a.IsAvailable,
-      }).ToList();
-
+      var articleDtos = await _articleService.GetAll();
       return Ok(articleDtos);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<ArticleDto>> GetById(int id)
     {
-      var article = await _repository.GetById(id);
-      
-      if (article == null) return NotFound(new { Message = "No se encontró el artículo" });
-      
-      var articleDto = new ArticleDto
-      {
-        Id = article.Id,
-        Description = article.Description,
-        UnitPrice = article.UnitPrice,
-        IsAvailable = article.IsAvailable,
-      };
+      var articleDto = await _articleService.GetById(id); 
+      if (articleDto == null) return NotFound(new { Message = "No se encontró el artículo" });
       return Ok(articleDto);
     }
 
     [HttpPost]
     public async Task<IActionResult> Create(CreateArticleDto createArticleDto)
     {
-      var article = new Article
-      {
-        Description = createArticleDto.Description,
-        UnitPrice = createArticleDto.UnitPrice,
-        IsAvailable = createArticleDto.IsAvailable ?? true,
-      };
-
-      await _repository.Create(article);
-      await _repository.Save();
-
-      var articleDto = new ArticleDto
-      {
-        Id = article.Id,
-        Description = article.Description,
-        UnitPrice = article.UnitPrice,
-        IsAvailable = article.IsAvailable,
-      };
+      var validationResult = await _createArticleValidator.ValidateAsync(createArticleDto);
+      if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
+      var articleDto = await _articleService.Create(createArticleDto);
 
       return CreatedAtAction(
         nameof(GetById),
-        new { id = article.Id }, 
+        new { id = articleDto.Id },
         new { Message = "Artículo creado exitosamente" }
        );
     }
@@ -75,30 +48,20 @@ namespace Facturacion.Controllers
     [HttpPut("{id}")]
     public async Task<ActionResult> Update(int id, UpdateArticleDto updateArticleDto)
     {
-      var article = await _repository.GetById(id);
-
+      var validationResult = await _updateArticleValidator.ValidateAsync(updateArticleDto);
+      if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
+      var article = await _articleService.GetById(id);
       if (article == null) return NotFound(new { Message = "No se encontró el artículo" });
-
-      article.Description = updateArticleDto.Description ?? article.Description;
-      article.UnitPrice = updateArticleDto.UnitPrice ?? article.UnitPrice;
-      article.IsAvailable = updateArticleDto.IsAvailable ?? article.IsAvailable;
-
-      _repository.Update(article);
-      await _repository.Save();
-
+      await _articleService.Update(id, updateArticleDto);
       return Ok(new { Message = "Artículo actualizado exitosamente" });
     }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete(int id)
     {
-      var article = await _repository.GetById(id);
-
-      if (article == null) return NotFound(new { Message = "No se encontró el artículo" });
-
-      _repository.Delete(article);
-      await _repository.Save();
-
+      var articleDto = await _articleService.GetById(id);
+      if (articleDto == null) return NotFound(new { Message = "No se encontró el artículo" });
+      await _articleService.Delete(articleDto.Id);
       return Ok(new { Message = "Artículo eliminado exitosamente" });
     }
   }
