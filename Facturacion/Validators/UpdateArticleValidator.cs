@@ -8,6 +8,7 @@ namespace Facturacion.Validators
     public UpdateArticleValidator()
     {
       RuleFor(a => a.Description)
+        .NotEmpty()
         .MaximumLength(100)
         .WithMessage("La descripción no puede exceder los 100 caracteres")
         .When(a => a.Description != null);
