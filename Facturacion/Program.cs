@@ -23,12 +23,14 @@ namespace Facturacion
 
       // Repositories
       builder.Services.AddScoped<IRepository<Article>, ArticleRepository>();
+      builder.Services.AddScoped<IRepository<Seller>, SellerRepository>();
 
       // Services
       builder.Services.AddScoped<IService<ArticleDto, CreateArticleDto, UpdateArticleDto>, ArticleService>();
 
       // Mappers
       builder.Services.AddAutoMapper(typeof(ArticleMapper));
+      builder.Services.AddAutoMapper(typeof(SellerMapper));
 
       // Validators
       builder.Services.AddScoped<IValidator<CreateArticleDto>, CreateArticleValidator>();  
