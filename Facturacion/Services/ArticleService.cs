@@ -1,62 +1,33 @@
-﻿using Facturacion.DTOs;
+﻿using AutoMapper;
+using Facturacion.DTOs;
 using Facturacion.Models;
 using Facturacion.Repositories;
 
 namespace Facturacion.Services
 {
-  public class ArticleService(IRepository<Article> repository) : IService<ArticleDto, CreateArticleDto, UpdateArticleDto>
+  public class ArticleService(IRepository<Article> repository, IMapper mapper) : IService<ArticleDto, CreateArticleDto, UpdateArticleDto>
   {
     private readonly IRepository<Article> _repository = repository;
+    private readonly IMapper _mapper = mapper;
     public async Task<IEnumerable<ArticleDto>> GetAll()
     {
       var articles = await _repository.GetAll();
-      
-      var articleDtos = articles.Select(a => new ArticleDto
-      {
-        Id = a.Id,
-        Description = a.Description,
-        UnitPrice = a.UnitPrice,
-        IsAvailable = a.IsAvailable,
-      }).ToList();
-
+      var articleDtos = _mapper.Map<List<ArticleDto>>(articles);
       return articleDtos;
     }
     public async Task<ArticleDto?> GetById(int id)
     {
-      var article =  await _repository.GetById(id);
-
+      var article = await _repository.GetById(id);
       if (article == null) return null;
-
-      var articleDto = new ArticleDto
-      {
-        Id = article.Id,
-        Description = article.Description,
-        UnitPrice = article.UnitPrice,
-        IsAvailable = article.IsAvailable,
-      };
-
+      var articleDto = _mapper.Map<ArticleDto>(article);
       return articleDto;
     }
     public async Task<ArticleDto> Create(CreateArticleDto createArticleDto)
     {
-      var article = new Article
-      {
-        Description = createArticleDto.Description,
-        UnitPrice = createArticleDto.UnitPrice,
-        IsAvailable = createArticleDto.IsAvailable ?? true,
-      };
-
+      var article = _mapper.Map<Article>(createArticleDto);
       await _repository.Create(article);
       await _repository.Save();
-
-      var articleDto = new ArticleDto
-      {
-        Id = article.Id,
-        Description = article.Description,
-        UnitPrice = article.UnitPrice,
-        IsAvailable = article.IsAvailable,
-      };
-
+      var articleDto = _mapper.Map<ArticleDto>(article);
       return articleDto;
     }
     public async Task Update(int id, UpdateArticleDto updateArticleDto)

@@ -1,5 +1,6 @@
 using Facturacion.Data;
 using Facturacion.DTOs;
+using Facturacion.Mappers;
 using Facturacion.Models;
 using Facturacion.Repositories;
 using Facturacion.Services;
@@ -23,6 +24,9 @@ namespace Facturacion
 
       // Services
       builder.Services.AddScoped<IService<ArticleDto, CreateArticleDto, UpdateArticleDto>, ArticleService>();
+
+      // Mappers
+      builder.Services.AddAutoMapper(typeof(ArticleMapper));
 
       builder.Services.AddControllers();
       // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
