@@ -24,7 +24,7 @@ namespace Facturacion.Data
               .HasDefaultValue(true);
         entity.Property(s => s.CommissionPercentage)
               .HasDefaultValue(0);
-        entity.ToTable(s => s.HasCheckConstraint("CK_Prices", "[CommissionPercentage] BETWEEN 1 AND 100"));
+        entity.ToTable(s => s.HasCheckConstraint("CK_Prices", "[CommissionPercentage] BETWEEN 0 AND 100"));
       });
     }
   }
