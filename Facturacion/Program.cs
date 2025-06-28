@@ -1,6 +1,8 @@
 using Facturacion.Data;
+using Facturacion.DTOs;
 using Facturacion.Models;
 using Facturacion.Repositories;
+using Facturacion.Services;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
@@ -18,6 +20,9 @@ namespace Facturacion
 
       // Repositories
       builder.Services.AddScoped<IRepository<Article>, ArticleRepository>();
+
+      // Services
+      builder.Services.AddScoped<IService<ArticleDto, CreateArticleDto, UpdateArticleDto>, ArticleService>();
 
       builder.Services.AddControllers();
       // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
