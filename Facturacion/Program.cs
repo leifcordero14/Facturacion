@@ -27,6 +27,7 @@ namespace Facturacion
 
       // Services
       builder.Services.AddScoped<IService<ArticleDto, CreateArticleDto, UpdateArticleDto>, ArticleService>();
+      builder.Services.AddScoped<IService<SellerDto, CreateSellerDto, UpdateSellerDto>, SellerService>(); 
 
       // Mappers
       builder.Services.AddAutoMapper(typeof(ArticleMapper));
