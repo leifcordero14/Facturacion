@@ -23,16 +23,21 @@ namespace Facturacion
 
       // Repositories
       builder.Services.AddScoped<IRepository<Article>, ArticleRepository>();
+      builder.Services.AddScoped<IRepository<Seller>, SellerRepository>();
 
       // Services
       builder.Services.AddScoped<IService<ArticleDto, CreateArticleDto, UpdateArticleDto>, ArticleService>();
+      builder.Services.AddScoped<IService<SellerDto, CreateSellerDto, UpdateSellerDto>, SellerService>(); 
 
       // Mappers
       builder.Services.AddAutoMapper(typeof(ArticleMapper));
+      builder.Services.AddAutoMapper(typeof(SellerMapper));
 
       // Validators
       builder.Services.AddScoped<IValidator<CreateArticleDto>, CreateArticleValidator>();  
       builder.Services.AddScoped<IValidator<UpdateArticleDto>, UpdateArticleValidator>();
+      builder.Services.AddScoped<IValidator<CreateSellerDto>, CreateSellerValidator>();
+      builder.Services.AddScoped<IValidator<UpdateSellerDto>, UpdateSellerValidator>();
 
       builder.Services.AddControllers();
       // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
