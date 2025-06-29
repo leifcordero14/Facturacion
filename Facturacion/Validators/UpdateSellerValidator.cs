@@ -17,13 +17,7 @@ namespace Facturacion.Validators
 
       RuleFor(s => s.CommissionPercentage)
         .InclusiveBetween(0, 100)
-        .WithMessage("El porcentaje de comisión debe estar entre 0 y 100")
-        .When(s => s.CommissionPercentage.HasValue);
-      
-      RuleFor(a => a.IsActive)
-        .Must(v => v == true || v == false)
-        .WithMessage("Valor inválido para disponibilidad")
-        .When(a => a.IsActive.HasValue);
+        .WithMessage("El porcentaje de comisión debe estar entre 0 y 100");
     }
   }
 }
