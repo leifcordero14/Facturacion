@@ -1,15 +1,22 @@
 ﻿using Facturacion.DTOs;
 using Facturacion.Services;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
+using Facturacion.Utilities;
 
 namespace Facturacion.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
   public class SellersController(
-    IService<SellerDto, CreateSellerDto, UpdateSellerDto> sellerService) : ControllerBase
+    IService<SellerDto, CreateSellerDto, UpdateSellerDto> sellerService,
+    IValidator<CreateSellerDto> createValidator,
+    IValidator<UpdateSellerDto> updateValidator) : ControllerBase
   {
     private readonly IService<SellerDto, CreateSellerDto, UpdateSellerDto> _sellerService = sellerService;
+    private readonly IValidator<CreateSellerDto> _createValidator = createValidator;
+    private readonly IValidator<UpdateSellerDto> _updateValidator = updateValidator;
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<SellerDto>>> GetAll()
@@ -27,8 +34,13 @@ namespace Facturacion.Controllers
     }
 
     [HttpPost]
-    public async Task<ActionResult> Create(CreateSellerDto createSellerDto)
+    public async Task<IActionResult> Create(CreateSellerDto createSellerDto)
     {
+      var validationResult = await _createValidator.ValidateAsync(createSellerDto);
+      if (!validationResult.IsValid) 
+      {
+        return BadRequest(new { Errors = ValidationResultHelper.GetErrorMessages(validationResult) });
+      }
       var sellerDto = await _sellerService.Create(createSellerDto);
 
       return CreatedAtAction(
@@ -41,6 +53,11 @@ namespace Facturacion.Controllers
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, UpdateSellerDto updateSellerDto)
     {
+      var validationResult = await _updateValidator.ValidateAsync(updateSellerDto);
+      if (!validationResult.IsValid)
+      {
+        return BadRequest(new { Errors = ValidationResultHelper.GetErrorMessages(validationResult) });
+      }
       var seller = await _sellerService.GetById(id);
       if (seller == null) return NotFound(new { Message = "No se encontró el vendedor" });
       await _sellerService.Update(id, updateSellerDto);
@@ -48,7 +65,7 @@ namespace Facturacion.Controllers
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
       var sellerDto = await _sellerService.GetById(id);
       if (sellerDto == null) return NotFound(new { Message = "No se encontró el vendedor" });

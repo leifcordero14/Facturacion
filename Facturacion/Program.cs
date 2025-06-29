@@ -36,6 +36,8 @@ namespace Facturacion
       // Validators
       builder.Services.AddScoped<IValidator<CreateArticleDto>, CreateArticleValidator>();  
       builder.Services.AddScoped<IValidator<UpdateArticleDto>, UpdateArticleValidator>();
+      builder.Services.AddScoped<IValidator<CreateSellerDto>, CreateSellerValidator>();
+      builder.Services.AddScoped<IValidator<UpdateSellerDto>, UpdateSellerValidator>();
 
       builder.Services.AddControllers();
       // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
