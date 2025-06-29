@@ -10,9 +10,7 @@ namespace Facturacion.Mappers
     {
       CreateMap<Seller, SellerDto>();
 
-      CreateMap<CreateSellerDto, Seller>()
-        .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive ?? true))
-        .ForMember(dest => dest.CommissionPercentage, opt => opt.MapFrom(src => src.CommissionPercentage ?? 0));
+      CreateMap<CreateSellerDto, Seller>();
     }
   }
 }

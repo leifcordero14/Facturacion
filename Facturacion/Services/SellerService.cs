@@ -35,10 +35,10 @@ namespace Facturacion.Services
       var seller = await _repository.GetById(id);
       if (seller == null) throw new Exception("No se encontró el vendedor");
 
-      seller.FirstName = updateSellerDto.FirstName ?? seller.FirstName;
-      seller.LastName = updateSellerDto.LastName ?? seller.LastName;
-      seller.CommissionPercentage = updateSellerDto.CommissionPercentage ?? seller.CommissionPercentage;
-      seller.IsActive = updateSellerDto.IsActive ?? seller.IsActive;
+      seller.FirstName = updateSellerDto.FirstName;
+      seller.LastName = updateSellerDto.LastName;
+      seller.CommissionPercentage = updateSellerDto.CommissionPercentage;
+      seller.IsActive = updateSellerDto.IsActive;
 
       _repository.Update(seller);
       await _repository.Save();
