@@ -1,5 +1,6 @@
 ﻿using Facturacion.DTOs;
 using Facturacion.Services;
+using Facturacion.Utilities;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,12 +10,12 @@ namespace Facturacion.Controllers
   [ApiController]
   public class ArticlesController(
     IService<ArticleDto, CreateArticleDto, UpdateArticleDto> articleService, 
-    IValidator<CreateArticleDto> createArticleValidator, 
-    IValidator<UpdateArticleDto> updateArticleValidator) : ControllerBase
+    IValidator<CreateArticleDto> createValidator, 
+    IValidator<UpdateArticleDto> updateValidator) : ControllerBase
   {
     private readonly IService<ArticleDto, CreateArticleDto, UpdateArticleDto> _articleService = articleService;
-    private readonly IValidator<CreateArticleDto> _createArticleValidator = createArticleValidator;
-    private readonly IValidator<UpdateArticleDto> _updateArticleValidator = updateArticleValidator;
+    private readonly IValidator<CreateArticleDto> _createValidator = createValidator;
+    private readonly IValidator<UpdateArticleDto> _updateValidator = updateValidator;
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ArticleDto>>> GetAll()
@@ -34,8 +35,11 @@ namespace Facturacion.Controllers
     [HttpPost]
     public async Task<IActionResult> Create(CreateArticleDto createArticleDto)
     {
-      var validationResult = await _createArticleValidator.ValidateAsync(createArticleDto);
-      if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
+      var validationResult = await _createValidator.ValidateAsync(createArticleDto);
+      if (!validationResult.IsValid)
+      {
+        return BadRequest(new { Errors = ValidationResultHelper.GetErrorMessages(validationResult) });
+      }
       var articleDto = await _articleService.Create(createArticleDto);
 
       return CreatedAtAction(
@@ -46,10 +50,13 @@ namespace Facturacion.Controllers
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> Update(int id, UpdateArticleDto updateArticleDto)
+    public async Task<IActionResult> Update(int id, UpdateArticleDto updateArticleDto)
     {
-      var validationResult = await _updateArticleValidator.ValidateAsync(updateArticleDto);
-      if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
+      var validationResult = await _updateValidator.ValidateAsync(updateArticleDto);
+      if (!validationResult.IsValid)
+      {
+        return BadRequest(new { Errors = ValidationResultHelper.GetErrorMessages(validationResult) });
+      }
       var article = await _articleService.GetById(id);
       if (article == null) return NotFound(new { Message = "No se encontró el artículo" });
       await _articleService.Update(id, updateArticleDto);
@@ -57,7 +64,7 @@ namespace Facturacion.Controllers
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
       var articleDto = await _articleService.GetById(id);
       if (articleDto == null) return NotFound(new { Message = "No se encontró el artículo" });
