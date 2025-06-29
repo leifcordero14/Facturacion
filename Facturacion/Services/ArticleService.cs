@@ -35,9 +35,9 @@ namespace Facturacion.Services
       var article = await _repository.GetById(id);
       if (article == null) throw new Exception("No se encontró el artículo");
 
-      article.Description = updateArticleDto.Description ?? article.Description;
-      article.UnitPrice = updateArticleDto.UnitPrice ?? article.UnitPrice;
-      article.IsAvailable = updateArticleDto.IsAvailable ?? article.IsAvailable;
+      article.Description = updateArticleDto.Description;
+      article.UnitPrice = updateArticleDto.UnitPrice;
+      article.IsAvailable = updateArticleDto.IsAvailable;
 
       _repository.Update(article);
       await _repository.Save();

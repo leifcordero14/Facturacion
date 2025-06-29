@@ -10,8 +10,7 @@ namespace Facturacion.Mappers
     {
       CreateMap<Article, ArticleDto>();
 
-      CreateMap<CreateArticleDto, Article>()
-        .ForMember(dest => dest.IsAvailable, opt => opt.MapFrom(src => src.IsAvailable ?? true));
+      CreateMap<CreateArticleDto, Article>();
     }
   }
 }
