@@ -25,6 +25,7 @@ namespace Facturacion
       // Repositories
       builder.Services.AddScoped<IRepository<Article>, ArticleRepository>();
       builder.Services.AddScoped<IRepository<Seller>, SellerRepository>();
+      builder.Services.AddScoped<IRepository<Client>, ClientRepository>();
 
       // Services
       builder.Services.AddScoped<IService<ArticleDto, CreateArticleDto, UpdateArticleDto>, ArticleService>();
@@ -33,6 +34,7 @@ namespace Facturacion
       // Mappers
       builder.Services.AddAutoMapper(typeof(ArticleMapper));
       builder.Services.AddAutoMapper(typeof(SellerMapper));
+      builder.Services.AddAutoMapper(typeof(ClientMapper));
 
       // Validators
       builder.Services.AddScoped<IValidator<CreateArticleDto>, CreateArticleValidator>();  
