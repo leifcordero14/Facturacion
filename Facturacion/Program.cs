@@ -4,6 +4,7 @@ using Facturacion.Mappers;
 using Facturacion.Models;
 using Facturacion.Repositories;
 using Facturacion.Services;
+using Facturacion.Utilities;
 using Facturacion.Validators;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +39,9 @@ namespace Facturacion
       builder.Services.AddScoped<IValidator<UpdateArticleDto>, UpdateArticleValidator>();
       builder.Services.AddScoped<IValidator<CreateSellerDto>, CreateSellerValidator>();
       builder.Services.AddScoped<IValidator<UpdateSellerDto>, UpdateSellerValidator>();
+
+      // Utilities
+      builder.Services.AddScoped<IValidationResultHelper, ValidationResultHelper>();
 
       builder.Services.AddControllers();
       // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

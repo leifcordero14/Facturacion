@@ -9,11 +9,13 @@ namespace Facturacion.Controllers
   [Route("api/[controller]")]
   [ApiController]
   public class ArticlesController(
-    IService<ArticleDto, CreateArticleDto, UpdateArticleDto> articleService, 
+    IService<ArticleDto, CreateArticleDto, UpdateArticleDto> articleService,
+    IValidationResultHelper validationResultHelper,
     IValidator<CreateArticleDto> createValidator, 
     IValidator<UpdateArticleDto> updateValidator) : ControllerBase
   {
     private readonly IService<ArticleDto, CreateArticleDto, UpdateArticleDto> _articleService = articleService;
+    private readonly IValidationResultHelper _validationResultHelper = validationResultHelper;
     private readonly IValidator<CreateArticleDto> _createValidator = createValidator;
     private readonly IValidator<UpdateArticleDto> _updateValidator = updateValidator;
 
@@ -38,7 +40,7 @@ namespace Facturacion.Controllers
       var validationResult = await _createValidator.ValidateAsync(createArticleDto);
       if (!validationResult.IsValid)
       {
-        return BadRequest(new { Errors = ValidationResultHelper.GetErrorMessages(validationResult) });
+        return BadRequest(new { Errors = _validationResultHelper.GetErrorMessages(validationResult) });
       }
       var articleDto = await _articleService.Create(createArticleDto);
 
@@ -55,7 +57,7 @@ namespace Facturacion.Controllers
       var validationResult = await _updateValidator.ValidateAsync(updateArticleDto);
       if (!validationResult.IsValid)
       {
-        return BadRequest(new { Errors = ValidationResultHelper.GetErrorMessages(validationResult) });
+        return BadRequest(new { Errors = _validationResultHelper.GetErrorMessages(validationResult) });
       }
       var article = await _articleService.GetById(id);
       if (article == null) return NotFound(new { Message = "No se encontró el artículo" });
