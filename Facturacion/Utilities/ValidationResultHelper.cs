@@ -2,9 +2,9 @@
 
 namespace Facturacion.Utilities
 {
-  public class ValidationResultHelper
+  public class ValidationResultHelper : IValidationResultHelper
   {
-    public static IEnumerable<string> GetErrorMessages(ValidationResult validationResult)
+    public IEnumerable<string> GetErrorMessages(ValidationResult validationResult)
     {
       return validationResult.Errors.Select(error => error.ErrorMessage);
     }

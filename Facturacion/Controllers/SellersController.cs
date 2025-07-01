@@ -1,7 +1,6 @@
 ﻿using Facturacion.DTOs;
 using Facturacion.Services;
 using FluentValidation;
-using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Facturacion.Utilities;
 
@@ -11,10 +10,12 @@ namespace Facturacion.Controllers
   [ApiController]
   public class SellersController(
     IService<SellerDto, CreateSellerDto, UpdateSellerDto> sellerService,
+    IValidationResultHelper validationResultHelper,
     IValidator<CreateSellerDto> createValidator,
     IValidator<UpdateSellerDto> updateValidator) : ControllerBase
   {
     private readonly IService<SellerDto, CreateSellerDto, UpdateSellerDto> _sellerService = sellerService;
+    private readonly IValidationResultHelper _validationResultHelper = validationResultHelper;
     private readonly IValidator<CreateSellerDto> _createValidator = createValidator;
     private readonly IValidator<UpdateSellerDto> _updateValidator = updateValidator;
 
@@ -39,7 +40,7 @@ namespace Facturacion.Controllers
       var validationResult = await _createValidator.ValidateAsync(createSellerDto);
       if (!validationResult.IsValid) 
       {
-        return BadRequest(new { Errors = ValidationResultHelper.GetErrorMessages(validationResult) });
+        return BadRequest(new { Errors = _validationResultHelper.GetErrorMessages(validationResult) });
       }
       var sellerDto = await _sellerService.Create(createSellerDto);
 
@@ -56,7 +57,7 @@ namespace Facturacion.Controllers
       var validationResult = await _updateValidator.ValidateAsync(updateSellerDto);
       if (!validationResult.IsValid)
       {
-        return BadRequest(new { Errors = ValidationResultHelper.GetErrorMessages(validationResult) });
+        return BadRequest(new { Errors = _validationResultHelper.GetErrorMessages(validationResult) });
       }
       var seller = await _sellerService.GetById(id);
       if (seller == null) return NotFound(new { Message = "No se encontró el vendedor" });
