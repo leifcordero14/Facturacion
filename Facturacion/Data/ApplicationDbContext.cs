@@ -7,7 +7,7 @@ namespace Facturacion.Data
   {
     public DbSet<Article> Article { get; set; }
     public DbSet<Seller> Seller { get; set; }
-
+    public DbSet<Client> Client { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
       modelBuilder.Entity<Article>(entity =>
@@ -25,6 +25,12 @@ namespace Facturacion.Data
         entity.Property(s => s.CommissionPercentage)
               .HasDefaultValue(0);
         entity.ToTable(s => s.HasCheckConstraint("CK_Prices", "[CommissionPercentage] BETWEEN 0 AND 100"));
+      });
+
+      modelBuilder.Entity<Client>(entity =>
+      {
+        entity.Property(a => a.IsActive)
+              .HasDefaultValue(true);
       });
     }
   }
