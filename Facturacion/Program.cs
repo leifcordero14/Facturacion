@@ -48,6 +48,12 @@ namespace Facturacion
       // Utilities
       builder.Services.AddScoped<IValidationResultHelper, ValidationResultHelper>();
 
+      // CORS
+      builder.Services.AddCors(options => 
+      { 
+        options.AddPolicy("AllowAllOrigins", policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+      });
+
       builder.Services.AddControllers();
       // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
       builder.Services.AddOpenApi();
@@ -62,6 +68,8 @@ namespace Facturacion
       }
 
       app.UseHttpsRedirection();
+
+      app.UseCors("AllowAllOrigins");
 
       app.UseAuthorization();
 
