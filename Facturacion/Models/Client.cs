@@ -7,5 +7,6 @@
     public required string IdentificationNumber { get; set; }
     public required string LedgerAccount { get; set; }
     public bool IsActive { get; set; }
+    public ICollection<Billing> Billings { get; } = [];
   }
 }

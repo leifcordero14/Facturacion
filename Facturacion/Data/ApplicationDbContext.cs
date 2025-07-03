@@ -10,6 +10,7 @@ namespace Facturacion.Data
     public DbSet<Article> Article { get; set; }
     public DbSet<Seller> Seller { get; set; }
     public DbSet<Client> Client { get; set; }
+    public DbSet<Billing> Billing { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
       modelBuilder.Entity<Article>(entity =>
@@ -37,6 +38,18 @@ namespace Facturacion.Data
               .HasDefaultValue(true);
         entity.Property(c => c.IdentificationNumber)
               .HasConversion(identificationNumberConverter);
+      });
+
+      modelBuilder.Entity<Billing>(entity =>
+      {
+        entity.Property(b => b.UnitPrice)
+              .HasPrecision(18, 2);
+        entity.Property(b => b.CreatedAt)
+              .HasDefaultValueSql("GETUTCDATE()");
+        entity.Property(b => b.Quantity)
+              .HasDefaultValue(1);
+        entity.Property(b => b.Comment)
+              .HasDefaultValue(string.Empty);
       });
     }
     private static string CleanIdentificationNumber(string identificationNumber)
