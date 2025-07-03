@@ -25,20 +25,25 @@ namespace Facturacion
       // Repositories
       builder.Services.AddScoped<IRepository<Article>, ArticleRepository>();
       builder.Services.AddScoped<IRepository<Seller>, SellerRepository>();
+      builder.Services.AddScoped<IRepository<Client>, ClientRepository>();
 
       // Services
       builder.Services.AddScoped<IService<ArticleDto, CreateArticleDto, UpdateArticleDto>, ArticleService>();
       builder.Services.AddScoped<IService<SellerDto, CreateSellerDto, UpdateSellerDto>, SellerService>(); 
+      builder.Services.AddScoped<IService<ClientDto, CreateClientDto, UpdateClientDto>, ClientService>();
 
       // Mappers
       builder.Services.AddAutoMapper(typeof(ArticleMapper));
       builder.Services.AddAutoMapper(typeof(SellerMapper));
+      builder.Services.AddAutoMapper(typeof(ClientMapper));
 
       // Validators
       builder.Services.AddScoped<IValidator<CreateArticleDto>, CreateArticleValidator>();  
       builder.Services.AddScoped<IValidator<UpdateArticleDto>, UpdateArticleValidator>();
       builder.Services.AddScoped<IValidator<CreateSellerDto>, CreateSellerValidator>();
       builder.Services.AddScoped<IValidator<UpdateSellerDto>, UpdateSellerValidator>();
+      builder.Services.AddScoped<IValidator<CreateClientDto>, CreateClientValidator>();
+      builder.Services.AddScoped<IValidator<UpdateClientDto>, UpdateClientValidator>();
 
       // Utilities
       builder.Services.AddScoped<IValidationResultHelper, ValidationResultHelper>();
