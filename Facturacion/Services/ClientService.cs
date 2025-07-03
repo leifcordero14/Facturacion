@@ -35,7 +35,7 @@ namespace Facturacion.Services
       var client = await _repository.GetById(id);
       if (client == null) throw new Exception("No se encontró el cliente");
 
-      client.BussinesName = updateClientDto.BussinesName;
+      client.BusinessName = updateClientDto.BusinessName;
       client.IdentificationNumber = updateClientDto.IdentificationNumber;
       client.LedgerAccount = updateClientDto.LedgerAccount;
       client.IsActive = updateClientDto.IsActive;
