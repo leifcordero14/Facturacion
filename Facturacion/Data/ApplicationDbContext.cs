@@ -1,5 +1,7 @@
 ﻿using Facturacion.Models;
+using Facturacion.Utilities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Facturacion.Data
 {
@@ -27,11 +29,19 @@ namespace Facturacion.Data
         entity.ToTable(s => s.HasCheckConstraint("CK_Prices", "[CommissionPercentage] BETWEEN 0 AND 100"));
       });
 
+      var identificationNumberConverter = new ValueConverter<string, string>(v => CleanIdentificationNumber(v), v => v);
+
       modelBuilder.Entity<Client>(entity =>
       {
-        entity.Property(a => a.IsActive)
+        entity.Property(c => c.IsActive)
               .HasDefaultValue(true);
+        entity.Property(c => c.IdentificationNumber)
+              .HasConversion(identificationNumberConverter);
       });
+    }
+    private static string CleanIdentificationNumber(string identificationNumber)
+    {
+      return identificationNumber.Replace("-", "").Replace(" ", "").Trim();
     }
   }
 }
