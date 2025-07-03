@@ -30,6 +30,7 @@ namespace Facturacion
       // Services
       builder.Services.AddScoped<IService<ArticleDto, CreateArticleDto, UpdateArticleDto>, ArticleService>();
       builder.Services.AddScoped<IService<SellerDto, CreateSellerDto, UpdateSellerDto>, SellerService>(); 
+      builder.Services.AddScoped<IService<ClientDto, CreateClientDto, UpdateClientDto>, ClientService>();
 
       // Mappers
       builder.Services.AddAutoMapper(typeof(ArticleMapper));
@@ -41,6 +42,8 @@ namespace Facturacion
       builder.Services.AddScoped<IValidator<UpdateArticleDto>, UpdateArticleValidator>();
       builder.Services.AddScoped<IValidator<CreateSellerDto>, CreateSellerValidator>();
       builder.Services.AddScoped<IValidator<UpdateSellerDto>, UpdateSellerValidator>();
+      builder.Services.AddScoped<IValidator<CreateClientDto>, CreateClientValidator>();
+      builder.Services.AddScoped<IValidator<UpdateClientDto>, UpdateClientValidator>();
 
       // Utilities
       builder.Services.AddScoped<IValidationResultHelper, ValidationResultHelper>();
