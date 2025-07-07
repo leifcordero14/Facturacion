@@ -13,15 +13,8 @@ Este documento explica cómo correr proyecto de facturación en tu entorno local
 ---
 
 ## 🚀 Pasos para Ejecutar el Proyecto
-
-1. **Restaurar las dependencias del proyecto**  
-   Abre la terminal o consola de comandos en la carpeta raíz del proyecto y ejecuta:
-
-   ```bash
-   dotnet restore
-   ```
    
-2. **Configurar la cadena de conexión**  
+1. **Configurar la cadena de conexión**  
    Abre el archivo `appsettings.json` y localiza la sección `ConnectionStrings`. Reemplaza el valor de `DefaultConnection` con los datos de tu servidor SQL. Ejemplo:
 
    ```json
@@ -30,7 +23,7 @@ Este documento explica cómo correr proyecto de facturación en tu entorno local
    }
    ```
    
-3. **Aplicar migraciones**  
+2. **Aplicar migraciones**  
    Antes de correr el proyecto, aplica las migraciones para crear las tablas necesarias en la base de datos. Abre el Administrador de Consola de Paquetes
    (Package Manager Console) y corre el siguiente comando:
 
@@ -38,7 +31,7 @@ Este documento explica cómo correr proyecto de facturación en tu entorno local
    Update-Database
    ```
    
-4. **Correr el proyecto**  
+3. **Correr el proyecto**  
    Abre la terminal o consola de comandos en la carpeta raíz del proyecto y ejecuta:
 
    ```bash
