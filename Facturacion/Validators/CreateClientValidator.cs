@@ -1,4 +1,5 @@
-﻿using Facturacion.DTOs;
+﻿using Facturacion.Data;
+using Facturacion.DTOs;
 using Facturacion.Utilities;
 using FluentValidation;
 
@@ -6,8 +7,11 @@ namespace Facturacion.Validators
 {
   public class CreateClientValidator : AbstractValidator<CreateClientDto>
   {
-    public CreateClientValidator()
+    private readonly ApplicationDbContext _context;
+    public CreateClientValidator(ApplicationDbContext context)
     {
+      _context = context;
+
       RuleFor(c => c.BusinessName)
         .NotEmpty()
         .WithMessage("El nombre comercial o razón social es obligatorio")
@@ -18,7 +22,10 @@ namespace Facturacion.Validators
         .NotEmpty()
         .WithMessage("El RNC o cédula es obligatorio")
         .Must(IdentificationNumberHelper.IsValidCedulaOrRNC)
-        .WithMessage("El RNC o cédula es inválido");
+        .WithMessage("El RNC o cédula es inválido")
+        .MustAsync(async (id, cancellationToken) =>
+          !await IdentificationNumberHelper.AlreadyExists(_context, id, cancellationToken))
+        .WithMessage("El RNC o cédula ya está registrado");
 
       RuleFor(c => c.LedgerAccount)
         .NotEmpty()

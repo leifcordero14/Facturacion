@@ -1,4 +1,7 @@
-﻿namespace Facturacion.Utilities
+﻿using Facturacion.Data;
+using Microsoft.EntityFrameworkCore;
+
+namespace Facturacion.Utilities
 {
   public static class IdentificationNumberHelper
   {
@@ -47,6 +50,12 @@
       return (modulo == 0 && verifier == 1) ||
              (modulo == 1 && verifier == 1) ||
              ((11 - modulo) == verifier);
+    }
+
+    public static async Task<bool> AlreadyExists(ApplicationDbContext context, string identificationNumber, CancellationToken cancellationToken = default)
+    {
+      string cleanId = identificationNumber.Replace("-", "").Replace(" ", "").Trim();
+      return await context.Client.AnyAsync(c => c.IdentificationNumber == cleanId, cancellationToken);
     }
   }
 }
