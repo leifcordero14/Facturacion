@@ -37,6 +37,8 @@ namespace Facturacion.Data
               .HasDefaultValue(true);
         entity.Property(c => c.IdentificationNumber)
               .HasConversion(identificationNumberConverter);
+        entity.HasIndex(c => c.IdentificationNumber)
+              .IsUnique();
       });
     }
     private static string CleanIdentificationNumber(string identificationNumber)
