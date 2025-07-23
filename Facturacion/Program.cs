@@ -26,16 +26,19 @@ namespace Facturacion
       builder.Services.AddScoped<IRepository<Article>, ArticleRepository>();
       builder.Services.AddScoped<IRepository<Seller>, SellerRepository>();
       builder.Services.AddScoped<IRepository<Client>, ClientRepository>();
+      builder.Services.AddScoped<IGetPostRepository<Billing>, BillingRepository>();
 
       // Services
       builder.Services.AddScoped<IService<ArticleDto, CreateArticleDto, UpdateArticleDto>, ArticleService>();
       builder.Services.AddScoped<IService<SellerDto, CreateSellerDto, UpdateSellerDto>, SellerService>(); 
       builder.Services.AddScoped<IService<ClientDto, CreateClientDto, UpdateClientDto>, ClientService>();
+      builder.Services.AddScoped<ICreateReadService<BillingDto, CreateBillingDto>, BillingService>();
 
       // Mappers
       builder.Services.AddAutoMapper(typeof(ArticleMapper));
       builder.Services.AddAutoMapper(typeof(SellerMapper));
       builder.Services.AddAutoMapper(typeof(ClientMapper));
+      builder.Services.AddAutoMapper(typeof(BillingMapper));
 
       // Validators
       builder.Services.AddScoped<IValidator<CreateArticleDto>, CreateArticleValidator>();  
@@ -44,9 +47,11 @@ namespace Facturacion
       builder.Services.AddScoped<IValidator<UpdateSellerDto>, UpdateSellerValidator>();
       builder.Services.AddScoped<IValidator<CreateClientDto>, CreateClientValidator>();
       builder.Services.AddScoped<IValidator<UpdateClientDto>, UpdateClientValidator>();
+      builder.Services.AddScoped<IValidator<CreateBillingDto>, CreateBillingValidator>();
 
       // Utilities
       builder.Services.AddScoped<IValidationResultHelper, ValidationResultHelper>();
+      builder.Services.AddScoped<EntityExistenceChecker>();
 
       // CORS
       builder.Services.AddCors(options => 
