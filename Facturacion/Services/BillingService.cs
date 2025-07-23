@@ -5,9 +5,13 @@ using Facturacion.Repositories;
 
 namespace Facturacion.Services
 {
-  public class BillingService(IGetPostRepository<Billing> repository, IMapper mapper) : ICreateReadService<BillingDto, CreateBillingDto> 
+  public class BillingService(
+    IGetPostRepository<Billing> repository, 
+    IFilterRepository<Billing, BillingFilterDto> filterRepository, 
+    IMapper mapper) : ICreateReadService<BillingDto, CreateBillingDto>, IFilterService<BillingDto, BillingFilterDto>
   {
     private readonly IGetPostRepository<Billing> _repository = repository;
+    private readonly IFilterRepository<Billing, BillingFilterDto> _filterRepository = filterRepository;
     private readonly IMapper _mapper = mapper;
     public async Task<IEnumerable<BillingDto>> GetAll()
     {
@@ -21,6 +25,12 @@ namespace Facturacion.Services
       if (billing == null) return null;
       var billingDto = _mapper.Map<BillingDto>(billing);
       return billingDto;
+    }
+    public async Task<IEnumerable<BillingDto>> GetByFilter(BillingFilterDto filter)
+    {
+      var billings = await _filterRepository.GetByFilter(filter);
+      var billingDtos = _mapper.Map<List<BillingDto>>(billings);
+      return billingDtos;
     }
     public async Task<BillingDto> Create(CreateBillingDto createBillingDto)
     {

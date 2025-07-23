@@ -34,6 +34,7 @@ namespace Facturacion
       builder.Services.AddScoped<IService<SellerDto, CreateSellerDto, UpdateSellerDto>, SellerService>(); 
       builder.Services.AddScoped<IService<ClientDto, CreateClientDto, UpdateClientDto>, ClientService>();
       builder.Services.AddScoped<ICreateReadService<BillingDto, CreateBillingDto>, BillingService>();
+      builder.Services.AddScoped<IFilterService<BillingDto, BillingFilterDto>, BillingService>();
 
       // Mappers
       builder.Services.AddAutoMapper(typeof(ArticleMapper));
