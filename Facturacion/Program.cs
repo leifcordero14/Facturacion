@@ -37,6 +37,7 @@ namespace Facturacion
       builder.Services.AddAutoMapper(typeof(ArticleMapper));
       builder.Services.AddAutoMapper(typeof(SellerMapper));
       builder.Services.AddAutoMapper(typeof(ClientMapper));
+      builder.Services.AddAutoMapper(typeof(BillingMapper));
 
       // Validators
       builder.Services.AddScoped<IValidator<CreateArticleDto>, CreateArticleValidator>();  
