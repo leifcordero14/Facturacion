@@ -27,6 +27,7 @@ namespace Facturacion
       builder.Services.AddScoped<IRepository<Seller>, SellerRepository>();
       builder.Services.AddScoped<IRepository<Client>, ClientRepository>();
       builder.Services.AddScoped<IGetPostRepository<Billing>, BillingRepository>();
+      builder.Services.AddScoped<IFilterRepository<Billing, BillingFilterDto>, BillingRepository>();
 
       // Services
       builder.Services.AddScoped<IService<ArticleDto, CreateArticleDto, UpdateArticleDto>, ArticleService>();
