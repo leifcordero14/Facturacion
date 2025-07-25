@@ -17,15 +17,15 @@ namespace Facturacion.Utilities
         new(ClaimTypes.NameIdentifier, user.Id.ToString())
       };
 
-      var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("Token")!));
+      var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("JwtSettings:Secret")!));
 
       var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
 
       var tokenDescriptor = new JwtSecurityToken(
-        issuer: _configuration.GetValue<string>("Issuer"),
-        audience: _configuration.GetValue<string>("Audience"),
+        issuer: _configuration.GetValue<string>("JwtSettings:Issuer"),
+        audience: _configuration.GetValue<string>("JwtSettings:Audience"),
         claims: claim,
-        expires: DateTime.Now.AddDays(1),
+        expires: DateTime.UtcNow.AddDays(1),
         signingCredentials: creds
         );
 
