@@ -49,7 +49,7 @@ namespace Facturacion
               context.HandleResponse();
               context.Response.StatusCode = 401;
               context.Response.ContentType = "application/json";
-              var result = JsonSerializer.Serialize(new { Message = "No autorizado" });
+              var result = JsonSerializer.Serialize(new { message = "No autorizado" });
               return context.Response.WriteAsync(result);
             }
           };
