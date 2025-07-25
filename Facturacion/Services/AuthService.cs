@@ -18,7 +18,7 @@ namespace Facturacion.Services
     public async Task<User?> Register(CreateUserDto createUserDto)
     {
       var userExists = await _checker.UserExists(createUserDto.Email);
-      
+
       if (userExists) return null;
 
       var user = new User();
@@ -32,7 +32,7 @@ namespace Facturacion.Services
 
       return user;
     }
-    public async Task<string?> Login(CreateUserDto createUserDto)
+    public async Task<TokenResponseDto?> Login(CreateUserDto createUserDto)
     {
       var user = await _repository.GetByEmail(createUserDto.Email);
 
@@ -43,7 +43,14 @@ namespace Facturacion.Services
         return null;
       }
 
-      return _tokenManager.CreateToken(user);
+      var refreshToken = _tokenManager.CreateRefreshToken();
+
+      var response = _tokenManager.CreateTokenResponse(
+        _tokenManager.CreateAccessToken(user),
+        await _tokenManager.SaveRefreshToken(user, refreshToken)
+      );
+
+      return response;
     }
     public async Task<bool> UpdatePassword(int userId, UpdatePasswordDto updateDto)
     {
@@ -59,6 +66,30 @@ namespace Facturacion.Services
       _repository.Update(user);
       await _repository.Save();
 
+      return true;
+    }
+    public async Task<TokenResponseDto?> GetTokenResponse(RefreshTokenRequestDto request)
+    {
+      var user = await _repository.GetById(request.UserId);
+      if (user == null) return null;
+      if (!_tokenManager.IsValidRefreshToken(user, request.RefreshToken)) return null;
+      
+      var newAccessToken = _tokenManager.CreateAccessToken(user);
+      var newRefreshToken = _tokenManager.CreateRefreshToken();
+
+      await _tokenManager.SaveRefreshToken(user, newRefreshToken);
+      return _tokenManager.CreateTokenResponse(newAccessToken, newRefreshToken);
+    }
+    public async Task<bool> Logout(int userId)
+    {
+      var user = await _repository.GetById(userId);
+      if (user == null) return false;
+
+      user.RefreshToken = null;
+      user.RefreshTokenExpiryTime = null;
+
+      _repository.Update(user);
+      await _repository.Save();
       return true;
     }
   }

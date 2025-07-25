@@ -25,9 +25,9 @@ namespace Facturacion.Controllers
     [HttpPost("login")]
     public async Task<IActionResult> Login(CreateUserDto request)
     {
-      var token = await _service.Login(request);
-      if (token == null) return Unauthorized(new { Message = "Credenciales inválidas" });
-      return Ok(new { Message = "Inicio de sesión exitoso", Token = token });
+      var tokenResponse = await _service.Login(request);
+      if (tokenResponse == null) return Unauthorized(new { Message = "Credenciales inválidas" });
+      return Ok(new { Message = "Inicio de sesión exitoso", Tokens = tokenResponse });
     }
 
     [HttpPut("update-password")]
@@ -37,6 +37,23 @@ namespace Facturacion.Controllers
       var updated = await _service.UpdatePassword(userId, updatePasswordDto);
       if (!updated) return BadRequest(new { Message = "Contraseña actual incorrecta o usuario no registrado" });
       return Ok(new { Message = "Contraseña actualizada exitosamente" });
+    }
+
+    [HttpPost("refresh-token")]
+    public async Task<ActionResult<TokenResponseDto>> RefreshToken(RefreshTokenRequestDto request)
+    {
+      var tokenResponse = await _service.GetTokenResponse(request);
+      if (tokenResponse == null) return Unauthorized(new { Message = "Token de actualización inválido" });
+      return Ok(new { Message = "Token actualizado exitosamente", Tokens = tokenResponse });
+    }
+
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout()
+    {
+      var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+      var result = await _service.Logout(userId);
+      if (!result) return NotFound(new { message = "Usuario no encontrado" });
+      return Ok(new { message = "Sesión cerrada correctamente" });
     }
   }
 }
