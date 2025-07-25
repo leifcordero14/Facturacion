@@ -10,6 +10,7 @@ namespace Facturacion.Data
     public DbSet<Seller> Seller { get; set; }
     public DbSet<Client> Client { get; set; }
     public DbSet<Billing> Billing { get; set; }
+    public DbSet<User> User { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
       modelBuilder.Entity<Article>(entity =>
