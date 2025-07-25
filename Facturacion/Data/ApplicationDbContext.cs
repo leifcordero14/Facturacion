@@ -53,6 +53,12 @@ namespace Facturacion.Data
         entity.Property(b => b.Comment)
               .HasDefaultValue(string.Empty);
       });
+
+      modelBuilder.Entity<User>(entity =>
+      {
+        entity.HasIndex(u => u.Email)
+              .IsUnique();
+      });
     }
     private static string CleanIdentificationNumber(string identificationNumber)
     {

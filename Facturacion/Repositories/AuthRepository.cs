@@ -1,5 +1,6 @@
 ﻿using Facturacion.Data;
 using Facturacion.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Facturacion.Repositories
 {
@@ -8,7 +9,7 @@ namespace Facturacion.Repositories
     private readonly ApplicationDbContext _context = context;
     public async Task<User?> GetByEmail(string email)
     {
-      return await _context.User.FindAsync(email);
+      return await _context.User.FirstOrDefaultAsync(u => u.Email == email);
     }
     public async Task Create(User user)
     {
