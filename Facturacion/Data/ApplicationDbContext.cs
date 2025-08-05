@@ -52,6 +52,7 @@ namespace Facturacion.Data
               .HasDefaultValue(1);
         entity.Property(b => b.Comment)
               .HasDefaultValue(string.Empty);
+        entity.Ignore(b => b.Amount);
       });
 
       modelBuilder.Entity<User>(entity =>
