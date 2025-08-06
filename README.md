@@ -31,7 +31,7 @@ Este documento explica cómo correr proyecto de facturación en tu entorno local
    Update-Database
    ```
 
-3. **Colocar configuración para JWT**  
+3. **Colocar configuración para JWT e integración con contabilidad**  
    Abre el archivo `appsettings.json` y coloca los valores descritos más abajo para cada clave:
    
    ```json
@@ -39,14 +39,18 @@ Este documento explica cómo correr proyecto de facturación en tu entorno local
      "Secret": "",
      "Issuer": "",
      "Audience": ""
-   }
+   },
+   "AccountingApiUrl": "",
+   "ApiKey": ""
    ```
       
    - Secret: Cadena que se usa como clave secreta para firmar y verificar los tokens JWT. Debe ser una cadena larga y aleatoria con mínimo 64 bytes de longitud.
-   - Issuer: Cadena que identifica quién emite el token, normalmente el servidor o API. Ejemplo: MyAuthServer
-   - Audience: Cadena que identifica a quién va dirigido el token, es decir, quién debería aceptarlo. Ejemplo: MiApiUsuarios
+   - Issuer: Cadena que identifica quién emite el token, normalmente el servidor o API. Ejemplo: MyAuthServer.
+   - Audience: Cadena que identifica a quién va dirigido el token, es decir, quién debería aceptarlo. Ejemplo: MiApiUsuarios.
+   - AccountingApiUrl: Cadena que contienen la url del módulo de contabilidad.
+   - ApiKey: Llave utilizada para poder interactuar con el módulo de contabilidad.
 
-5. **Correr el proyecto**  
+4. **Correr el proyecto**  
    Abre la terminal o consola de comandos en la carpeta raíz del proyecto y ejecuta:
 
    ```bash
