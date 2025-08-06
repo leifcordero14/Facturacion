@@ -37,7 +37,7 @@ namespace Facturacion.Utilities
         issuer: _configuration.GetValue<string>("JwtSettings:Issuer"),
         audience: _configuration.GetValue<string>("JwtSettings:Audience"),
         claims: claim,
-        expires: DateTime.UtcNow.AddDays(1),
+        expires: DateTime.Now.AddDays(1),
         signingCredentials: creds
         );
 
@@ -53,14 +53,14 @@ namespace Facturacion.Utilities
     public async Task<string> SaveRefreshToken(User user, string refreshToken)
     {
       user.RefreshToken = refreshToken;
-      user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+      user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
       _repository.Update(user);
       await _repository.Save();
       return refreshToken;
     }
     public bool IsValidRefreshToken(User user, string refreshToken)
     {
-      if (user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow) return false;
+      if (user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now) return false;
       return true;
     }
   }

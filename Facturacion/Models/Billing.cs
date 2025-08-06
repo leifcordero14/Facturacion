@@ -6,7 +6,7 @@
     public decimal UnitPrice { get; set; }
     public int Quantity { get; set; }
     public required string Comment { get; set; } = string.Empty;
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
     public decimal Amount => UnitPrice * Quantity;
     public int? AccountingEntryId { get; set; }
     public int ArticleId { get; set; }
