@@ -55,6 +55,13 @@ namespace Facturacion
           };
         });
 
+      // Http client
+      builder.Services.AddHttpClient("AccountingAPI", client =>
+      {
+        client.BaseAddress = new Uri(builder.Configuration["AccountingApiUrl"]!);
+        client.DefaultRequestHeaders.Add("x-api-key", builder.Configuration["ApiKey"]);
+      });
+
       // Repositories
       builder.Services.AddScoped<IRepository<Article>, ArticleRepository>();
       builder.Services.AddScoped<IRepository<Seller>, SellerRepository>();
