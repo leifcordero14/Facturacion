@@ -19,7 +19,7 @@ Este documento explica cómo correr proyecto de facturación en tu entorno local
 
    ```json
    "ConnectionStrings": {
-    "DefaultConnection": "Server=TU_SERVIDOR;Database=TU_BASE_DE_DATOS;Trusted_Connection=True;TrustServerCertificate=True;"
+     "DefaultConnection": "Server=TU_SERVIDOR;Database=TU_BASE_DE_DATOS;Trusted_Connection=True;TrustServerCertificate=True;"
    }
    ```
    
@@ -30,13 +30,30 @@ Este documento explica cómo correr proyecto de facturación en tu entorno local
    ```bash
    Update-Database
    ```
+
+3. **Colocar configuración para JWT**  
+   Abre el archivo `appsettings.json` y coloca los valores descritos más abajo para cada clave:
    
-3. **Correr el proyecto**  
+   ```json
+   "JwtSettings": {
+     "Secret": "",
+     "Issuer": "",
+     "Audience": ""
+   }
+   ```
+      
+   - Secret: Cadena que se usa como clave secreta para firmar y verificar los tokens JWT. Debe ser una cadena larga y aleatoria con mínimo 64 bytes de longitud.
+   - Issuer: Cadena que identifica quién emite el token, normalmente el servidor o API. Ejemplo: MyAuthServer
+   - Audience: Cadena que identifica a quién va dirigido el token, es decir, quién debería aceptarlo. Ejemplo: MiApiUsuarios
+
+5. **Correr el proyecto**  
    Abre la terminal o consola de comandos en la carpeta raíz del proyecto y ejecuta:
 
    ```bash
    dotnet run
    ```
+
+NOTA: La mayoría de los endpoints requieren de autenticación para poder usarlos, por lo tanto, debes usar primero el endpoint de `api/auth/register`.
 
 ## 📚 Acceder a la Documentación del Proyecto
 Para acceder a la documentación tienes que agregar `/scalar` al final de la URL local. Por ejemplo:
